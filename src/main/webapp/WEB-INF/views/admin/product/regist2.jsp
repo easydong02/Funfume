@@ -1,4 +1,11 @@
+<%@page import="com.koreait.funfume.domain.Accord"%>
+<%@page import="com.koreait.funfume.domain.Note"%>
+<%@page import="java.util.List"%>
 <%@ page contentType="text/html;charset=UTF-8"%>
+<%
+List<Note> noteList = (List)request.getAttribute("noteList");
+List<Accord> accordList = (List)request.getAttribute("accordList");
+%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -93,20 +100,29 @@
 	                    	</select>
                     </div>
                     <div class="form-group">
-                    	<select name ="note_id">
-                    		<option>노트</option>
-                    		<option>1</option>
-                    		<option>2</option>
-                    		<option>3</option>
-                    	</select>
+						<p>탑 노트↓</p>
+						<% for(int i =0;i<noteList.size();i++){ %>
+						<% Note note = noteList.get(i); %>
+							<label><input type="checkbox" name="top_note" value="<%=note.getNote_id()%>"> <%=note.getNote_name()%></label>
+						<%} %>
+						<p>미들 노트↓</p>
+						<% for(int i =0;i<noteList.size();i++){ %>
+						<% Note note = noteList.get(i); %>
+							<label><input type="checkbox" name="middle_note" value="<%=note.getNote_id()%>"> <%=note.getNote_name()%></label>
+						<%} %>
+						<p>베이스 노트↓</p>
+						<% for(int i =0;i<noteList.size();i++){ %>
+						<% Note note = noteList.get(i); %>
+							<label><input type="checkbox" name="base_note" value="<%=note.getNote_id()%>"> <%=note.getNote_name()%></label>
+						<%} %>
+						
                     </div>
                     <div class="form-group">
-                    	<select name ="accord_id">
-                    		<option>향</option>
-                    		<option>1</option>
-                    		<option>2</option>
-                    		<option>3</option>
-                    	</select>
+						<p>향↓</p>
+						<% for(int i =0;i<accordList.size();i++){ %>
+						<% Accord accord = accordList.get(i); %>
+							<label><input type="checkbox" name="accord" value="<%=accord.getAccord_id()%>"> <%=accord.getAccord_name()%></label>
+						<%} %>
                     </div>
                     <div class="form-group">
                     	<select name ="gender_id">
@@ -172,6 +188,13 @@ $(function () {
 });
 </script>
 <script>
+var uploadFiles = [];
+var uploadTopNotes=[];
+var uploadMiddleNotes=[];
+var uploadBaseNotes=[];
+var uploadAccords =[];
+var $drop = $("#drop");
+
   $(function () {
     // Summernote
     $('#introduce').summernote()
@@ -191,52 +214,9 @@ $(function () {
     }); */
   })
 
+
   
-function regist(){
-	 $("form[name='form1']").attr({
-		action: "/admin/product/regist",
-		method: "post",
-		enctype: "multipart/form-data"
-	 });
-	 $("form[name='form1']").submit();
-  }
-  
-//제이쿼리로도 처리해본다
-function preview2(obj){
-	  for(var i=0; i<obj.files.length;i++){
-		  var reader = new FileReader();
-		  reader.onload=function(e){
-			  
-			  $("#preview").append($("<img src='"+e.target.result+"' width='100px'>"));
-		  }
-		  reader.readAsDataURL(obj.files[i]);
-	  }
-  }
- 
-//자바스크립트도 stream이 지원된다..
-function preview(obj){
-	console.log("이벤트를 발생시킨 컴포넌트는,",obj);
-	console.log("obj.files는", obj.files);
-	
-	for(var i=0;i<obj.files.length;i++){
-		//파일에 대한 접근 방법을 알았으니, 지금부터는 실제 파일을 읽어와보자!! 그러기 위해서는 스트림이 필요하다
-		var reader = new FileReader();
-		reader.onload=function(e){
-		 console.log("읽어들인 정보는: ",e);
-		 
-		 //div에 동적으로 img 돔을 생성하여 그 돔의 src속성에 e.target.result
-		 var img = document.createElement("img");
-		 img.src=e.target.result;
-		 img.style.width=100+"px";
-		 document.getElementById("preview").appendChild(img);//동적으로 이미지 돔을 div에 넣기!!
-		};//파일을 다 읽어들이면, 익명함수 호출...
-		
-		reader.readAsDataURL(obj.files[i]); //파일 읽어들이기...
-	}
-  }
-  
-var uploadFiles = [];
-var $drop = $("#drop");
+
 
 $drop.on("dragenter", function(e) { //드래그 요소가 들어왔을떄
 	$(this).addClass('drag-over');
@@ -279,16 +259,41 @@ $("#bt_regist").on("click", function() {
 		console.log(file.name);
 	});
 	
+	$("input[name='top_note']:checked").each(function(){
+		var top_note = $(this).val();
+		uploadTopNotes.push(top_note);
+	});
+	
+	$("input[name='middle_note']:checked").each(function(){
+		var middle_note = $(this).val();
+		uploadMiddleNotes.push(middle_note);
+	});
+	$("input[name='base_note']:checked").each(function(){
+		var base_note = $(this).val();
+		uploadBaseNotes.push(base_note);
+	});
+	
+	$("input[name='accord']:checked").each(function(){
+		var accord = $(this).val();
+		uploadAccords.push(accord);
+	});
+	
 	
 	formData.append('product_name', $("input[name='product_name']").val());
 	formData.append('price', 		$("input[name='price']").val());
 	formData.append('brand_id', 	$("select[name='brand_id']").val());
+	
+	formData.append('uploadTopNotes', uploadTopNotes);
+	formData.append('uploadMiddleNotes',uploadMiddleNotes);
+	formData.append('uploadBaseNotes', uploadBaseNotes);
+	formData.append('uploadAccords', uploadAccords);
+	
 	formData.append('gender_id', 	$("select[name='gender_id']").val());
 	formData.append('introduction', $("textarea[name='introduction']").val());
 	
 	
  	$.ajax({
-		url: '/admin/product/test',
+		url: '/admin/product/regist2',
 		data : formData,
 		type : 'post',
 		contentType : false,

@@ -1,4 +1,11 @@
+<%@page import="com.koreait.funfume.domain.Note"%>
+<%@page import="java.util.List"%>
+<%@page import="com.koreait.funfume.domain.NoteType"%>
 <%@ page contentType="text/html;charset=UTF-8"%>
+<%
+	NoteType noteType = (NoteType)request.getAttribute("noteType");
+	List<Note> selectType= (List)request.getAttribute("selectType");
+%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,7 +13,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>AdminLTE 3 | Dashboard</title>
 	
-	<%@ include file="../../admin_inc/top_link.jsp" %>
+	<%@ include file="../../../admin_inc/head_link.jsp" %>
 	
   <!-- CodeMirror -->
   <link rel="stylesheet" href="/resources/admin/plugins/codemirror/codemirror.css">
@@ -25,11 +32,11 @@
   </div>
 
   <!-- Navbar -->
-  <%@ include file="../../admin_inc/navbar.jsp" %>
+  <%@ include file="../../../admin_inc/navbar.jsp" %>
   <!-- /.navbar -->
 
   <!-- Main Sidebar Container -->
-  <%@ include file="../../admin_inc/sidebar.jsp" %>  
+  <%@ include file="../../../admin_inc/sidebar.jsp" %>  
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -38,7 +45,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0">카테고리 등록</h1>
+            <h1 class="m-0">NOTE TYPE</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -57,26 +64,29 @@
         <!-- Small boxes (Stat box) -->
         <div class="row">
           <div class="col-12">
-            <div class="card card-info">
+            <div class="card card-warning">
               <div class="card-header">
-                <h3 class="card-title">Quick Example</h3>
+                <h3 class="card-title">NOTE TYPE INPUT</h3>
               </div>
               <!-- /.card-header -->
               <!-- form start -->
-              <form name ="form1">
+              <form name ="form">
                 <div class="card-body">
-                
-                  
                   <div class="form-group">
-                    <input type="text" class="form-control"  placeholder="카테고리 입력.." name="category_name">
+                 	<p>현재 <%=noteType.getNote_type_name()%>의 개수는 ' <%=selectType.size()%> '개 입니다 </p>
+                 	<input type="hidden" id="type_num" value="<%=selectType.size()%>">
+                    <input type="hidden" name="note_type_id" value="<%=noteType.getNote_type_id()%>" >
+                    <input type="text" class="form-control" name="note_type_name" value="<%=noteType.getNote_type_name()%>" >
+                 	<br>
+                 	<p style="background-color:Tomato;">노트가 있는 경우 삭제 하실수 없습니다. 노트가 없을시 타입 삭제 가능합니다.<p>
                   </div>
-                  
-                 </div>
+                                   	  
                 <!-- /.card-body -->
-
                 <div class="card-footer">
-                  <button type="button" class="btn btn-info" id="bt_regist">카테고리 등록</button>
-                  <button type="button" class="btn btn-info">목록</button>
+                  <button type="button" class="btn btn-warning" onClick="edit()">수정</button>
+                  <button type="button" class="btn btn-warning" onClick="del()">삭제</button>
+                  <button type="button" class="btn btn-warning" onClick="location.href='/admin/note/type/list'">목록</button>
+                  <button type="button" class="btn btn-warning" onClick="history.back()">돌아가기</button>
                 </div>
               </form>
             </div>
@@ -91,7 +101,7 @@
   </div>
   <!-- /.content-wrapper -->
   
-  <%@ include file="../../admin_inc/footer.jsp" %>  
+  <%@ include file="../../../admin_inc/footer.jsp" %>  
   
 
   <!-- Control Sidebar -->
@@ -102,37 +112,26 @@
 </div>
 <!-- ./wrapper -->
 
-<%@ include file="../../admin_inc/bottom_link.jsp" %>
-
-<script src="/resources/admin/plugins/summernote/summernote-bs4.min.js"></script>
-
-<script src="/resources/admin/plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
+<%@ include file="../../../admin_inc/bottom_link.jsp" %>
 
 <script>
-$(function () {
-  bsCustomFileInput.init();
-});
-</script>
-<script>
-  $(function () {
-	  
-    $("#bt_regist").click(function(){
-    	regist();
-    });
-  })
+function edit(){
+	if(confirm("수정하시겠습니까?")){
+		form.action="/admin/note/type/update";
+		form.method="post";
+		form.submit();
+	}
+}
 
-  
-function regist(){
-	 $("form[name='form1']").attr({
-		action: "/admin/category/regist",
-		method: "post",
-		
-	 });
-	 $("form[name='form1']").submit();
-  }
-  
-  
- 
+function del(){
+	if($("#type_num").val()>0){
+		alert("노트가 소속되어있어 삭제를 실패했습니다");
+		return;
+	} 
+	if(confirm("삭제하시겠습니까?")){
+		location.href="/admin/note/type/delete?note_type_id=<%=noteType.getNote_type_id()%>";
+	}	
+}
 </script>
 
 </body>

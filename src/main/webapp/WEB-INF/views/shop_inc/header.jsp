@@ -33,7 +33,7 @@
 			<nav class="limiter-menu-desktop container">
 				
 				<!-- Logo desktop -->		
-				<a href="#" class="logo">
+				<a href="/" class="logo">
 					<img src="/resources/funfume/images/icons/logo-01.png" alt="IMG-LOGO">
 				</a>
 

@@ -35,10 +35,8 @@ public class MybatisProductImgDAO implements ProductImgDAO{
 
 	@Override
 	public void delete(int product_id) throws ProductImgException {
-		int result =sessionTemplate.update("ProductImg.delete",product_id);
-		if(result ==0) {
-			throw new ProductImgException("상품 사진 삭제 실패");
-		}		
+		int result = sessionTemplate.delete("ProductImg.delete",product_id);
+		
 	}
 	
 }

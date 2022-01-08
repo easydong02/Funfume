@@ -1,10 +1,5 @@
-<%@page import="java.util.List"%>
-<%@page import="com.koreait.funfume.domain.Category"%>
 <%@ page contentType="text/html;charset=UTF-8"%>
-<%
-	List<Category> categoryList=(List)request.getAttribute("categoryList");
 
-%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,7 +7,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>AdminLTE 3 | Dashboard</title>
 	
-	<%@ include file="../../admin_inc/top_link.jsp" %>
+	<%@ include file="../../../admin_inc/head_link.jsp" %>
+	
+  <!-- CodeMirror -->
+  <link rel="stylesheet" href="/resources/admin/plugins/codemirror/codemirror.css">
+  <link rel="stylesheet" href="/resources/admin/plugins/codemirror/theme/monokai.css">	
+  
+  <!-- summernote -->
+  <link rel="stylesheet" href="/resources/admin/plugins/summernote/summernote-bs4.min.css">
 
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -24,11 +26,11 @@
   </div>
 
   <!-- Navbar -->
-  <%@ include file="../../admin_inc/navbar.jsp" %>
+  <%@ include file="../../../admin_inc/navbar.jsp" %>
   <!-- /.navbar -->
 
   <!-- Main Sidebar Container -->
-  <%@ include file="../../admin_inc/sidebar.jsp" %>  
+  <%@ include file="../../../admin_inc/sidebar.jsp" %>  
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -37,7 +39,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0">카테고리 목록</h1>
+            <h1 class="m-0">NOTE TYPE</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -56,34 +58,24 @@
         <!-- Small boxes (Stat box) -->
         <div class="row">
           <div class="col-12">
-            <div class="card">
+            <div class="card card-danger">
               <div class="card-header">
-                <h3 class="card-title">Expandable Table Tree</h3>
+                <h3 class="card-title">NOTE TYPE INPUT</h3>
               </div>
-              <!-- ./card-header -->
-              <div class="card-body p-0">
-                <table class="table table-hover">
-                  <tbody>
-                  <%for(Category category :categoryList){ %>
-                    <tr data-widget="expandable-table" aria-expanded="true">
-                      <td>
-                      	<%if(category.getDepth()>0){ %>
-                        	<i class="expandable-table-caret fas fa-caret-right fa-fw" sytle="margin-left:<%=20*category.getDepth() %>px"></i>
-                        <%} %>
-                        <a href="/admin/category/detail?category_id=<%=category.getCategory_id()%>"><%=category.getCategory_name() %></a>
-                      </td>
-                    </tr>
-                    
-                    <%} %>
-                    <tr class="expandable-body">
-                    <tr>
-                      <td><button type="button" class="btn btn-info" onClick="location.href='/admin/category/registform'">분류 등록</button>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-              <!-- /.card-body -->
+              <!-- /.card-header -->
+              <!-- form start -->
+              <form name ="form1">
+                <div class="card-body">
+                  <div class="form-group">
+                    <input type="text" class="form-control"  placeholder="노트타입을 입력 하세요" name="note_type_name">
+                  </div>
+                                   	  
+                <!-- /.card-body -->
+                <div class="card-footer">
+                  <button type="button" class="btn btn-danger" onClick="regist()">등록</button>
+                  <button type="button" class="btn btn-danger" onClick="location.href='/admin/note/list'">목록</button>
+                </div>
+              </form>
             </div>
             <!-- /.card -->
           </div>
@@ -96,7 +88,7 @@
   </div>
   <!-- /.content-wrapper -->
   
-  <%@ include file="../../admin_inc/footer.jsp" %>  
+  <%@ include file="../../../admin_inc/footer.jsp" %>  
   
 
   <!-- Control Sidebar -->
@@ -107,7 +99,23 @@
 </div>
 <!-- ./wrapper -->
 
-<%@ include file="../../admin_inc/bottom_link.jsp" %>
+<%@ include file="../../../admin_inc/bottom_link.jsp" %>
+
+<script>
+
+function regist(){
+	//유효성 체크 
+	if($("input[name='note_type_name']").val()==""){
+		alert("타입 입력은 필수입력입니다");
+		return;
+	}
+	 $("form[name='form1']").attr({
+		action: "/admin/note/type/regist",
+		method: "get"
+	 });
+	 $("form[name='form1']").submit();
+}
+</script>
 
 </body>
 </html>

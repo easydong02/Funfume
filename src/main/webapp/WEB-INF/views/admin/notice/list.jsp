@@ -77,19 +77,10 @@
                       <th>조회수</th>
                     </tr>
                   </thead>
-                  <tbody>
-                  	
-                    <tr id="dataList">
-                    </tr>
-                    
-                    <tr>
-                    	<td colspan="4">
-                    		<button type="button" class="btn btn-info" onClick="location.href='/admin/notice/registForm';">상품등록</button>
-                    	</td>
-                    </tr>
-                  </tbody>
+                  <tbody id="dataList"></tbody>
                 </table>
               </div>
+                  <button type="button" class="btn btn-info" onClick="location.href='/admin/notice/registForm';">상품등록</button>
               <!-- /.card-body -->
             </div>
             <!-- /.card -->
@@ -131,15 +122,16 @@ function getList(){
 			//alert(result);
 			//실제 데이터를 tr에 dom생성하면서 반영해보자
 			var tag="";
-			
 			for( var i =0; i<result.length;i++){
 				var json=result[i];
 				
+				tag+="<tr>";
 				tag +="<td></td>";
-				tag +="<td><a href='/admin/rest/notice/"+json.notice_id+"'>"+json.title+"</a></td>";
+				tag +="<td><a href='/admin/notice/detail?notice_id="+json.notice_id+"'>"+json.title+"</a></td>";
 				tag +="<td>"+json.writer+"</td>";
 				tag +="<td>"+json.regdate+"</td>";
 				tag +="<td>"+json.hit+"</td>";
+				tag+="</tr>";
 			}
 			$("#dataList").append(tag);
 		}

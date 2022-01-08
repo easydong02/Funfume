@@ -1,8 +1,23 @@
+<%@page import="com.koreait.funfume.domain.Gender"%>
+<%@page import="com.koreait.funfume.domain.ProductGender"%>
 <%@page import="com.koreait.funfume.domain.ProductImg"%>
 <%@page import="com.koreait.funfume.domain.Product"%>
+<%@page import="com.koreait.funfume.domain.ProductAccord"%>
+<%@page import="com.koreait.funfume.domain.ProductNote"%>
+<%@page import="com.koreait.funfume.domain.Accord"%>
+<%@page import="com.koreait.funfume.domain.Note"%>
+<%@page import="java.util.List"%>
 <%@ page contentType="text/html;charset=UTF-8"%>
-<% Product product= (Product)request.getAttribute("product"); 
-	int div=0;
+<%
+Product product= (Product)request.getAttribute("product");
+List<Note> noteList = (List)request.getAttribute("noteList");
+List<Accord> accordList = (List)request.getAttribute("accordList");
+List<Gender> genderList = (List)request.getAttribute("genderList");
+
+List<ProductNote> productNoteList = (List)request.getAttribute("productNoteList");
+List<ProductAccord> productAccordList = (List)request.getAttribute("productAccordList");
+List<ProductGender> productGenderList = (List)request.getAttribute("productGenderList");
+
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -10,7 +25,7 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>AdminLTE 3 | Dashboard</title>
-	<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+	
 	<%@ include file="../../admin_inc/head_link.jsp" %>
 	
 	<!-- CodeMirror -->
@@ -19,13 +34,16 @@
 	
 	<!-- summernote -->
 	<link rel="stylesheet" href="/resources/admin/plugins/summernote/summernote-bs4.min.css">
+
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 	
-<style>
+	<style>
 	.drag-over { background-color: #ff0; }
 	.thumb { width:200px; padding:5px; float:left; }
 	.thumb > img { width:100%; }
 	.thumb > .close { position:absolute; background-color:red; cursor:pointer; }
-</style>
+	</style>
+
 
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -50,7 +68,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0">Dashboard 2</h1>
+            <h1 class="m-0"></h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -71,21 +89,17 @@
           <div class="col-12">
             <div class="card card-info">
               <div class="card-header">
-                <h3 class="card-title">상세 보기</h3>
+                <h3 class="card-title">상세보기</h3>
               </div>
               <!-- /.card-header -->
               <!-- form start -->
-              <form name ="form1">
-              	<div id="hiddenImg">
-	              	<%for(int i=0;i<product.getProductImgs().size();i++){%>
-	              	<%ProductImg productImg = (ProductImg)product.getProductImgs().get(i); div=i; %>
-	              	<input type="hidden" id="hidden<%=i%>" name="imgFiles<%=i%>" value="<%=productImg.getImg()%>">
-					<%}%>
-				</div>      	
+              <form name ="form1" id="form1">
                 <div class="card-body">
-                <input type="hidden" name ="product_id" value= <%=product.getProduct_id() %>>
+                
                   
                   <div class="form-group">
+                    <input type="hidden" class="form-control"  value="<%=product.getProduct_id() %>" name="product_id">
+                    
                     <input type="text" class="form-control"  value="<%=product.getProduct_name() %>" name="product_name">
                   </div>
                   
@@ -94,34 +108,73 @@
                   </div>
                   <div class="form-group">
 	                    	<select name ="brand_id">
-	                    		<option ><%=product.getBrand_id() %></option>
+	                    		<option >브랜드</option>
 	                    		<option value= "1">1</option>
 	                    		<option value= "2">2</option>
 	                    		<option value= "3">3</option>
 	                    	</select>
                     </div>
                     <div class="form-group">
-                    	<select>
-                    		<option>노트</option>
-                    		<option>1</option>
-                    		<option>2</option>
-                    		<option>3</option>
-                    	</select>
+						<p>탑 노트↓</p>
+						<% for(int i =0;i<noteList.size();i++){ %>
+						<% Note note = noteList.get(i); %>
+							<label><input type="checkbox" name="top_note" value="<%=note.getNote_id()%>"
+							 <%for(int j =0; j<productNoteList.size();j++){ %>
+							 <%ProductNote productNote = productNoteList.get(j); %>
+							 <%if(productNote.getNote_id()==note.getNote_id() && productNote.getNote_place().equals("top") && productNote.getProduct_id() == product.getProduct_id() ){ %>
+							 checked
+							 <%}} %>
+							 > <%=note.getNote_name()%></label>
+						<%} %>
+						<p>미들 노트↓</p>
+						<% for(int i =0;i<noteList.size();i++){ %>
+						<% Note note = noteList.get(i); %>
+							<label><input type="checkbox" name="middle_note" value="<%=note.getNote_id()%>"
+							 <%for(int j =0; j<productNoteList.size();j++){ %>
+							 <%ProductNote productNote = productNoteList.get(j); %>
+							 <%if(productNote.getNote_id()==note.getNote_id() && productNote.getNote_place().equals("middle") && productNote.getProduct_id() == product.getProduct_id() ){ %>
+							 checked
+							 <%}} %>							
+							> <%=note.getNote_name()%></label>
+						<%} %>
+						<p>베이스 노트↓</p>
+						<% for(int i =0;i<noteList.size();i++){ %>
+						<% Note note = noteList.get(i); %>
+							<label><input type="checkbox" name="base_note" value="<%=note.getNote_id()%>"
+							 <%for(int j =0; j<productNoteList.size();j++){ %>
+							 <%ProductNote productNote = productNoteList.get(j); %>
+							 <%if(productNote.getNote_id()==note.getNote_id() && productNote.getNote_place().equals("base") && productNote.getProduct_id() == product.getProduct_id() ){ %>
+							 checked
+							 <%}} %>							
+							> <%=note.getNote_name()%></label>
+						<%} %>
+						
                     </div>
                     <div class="form-group">
-                    	<select>
-                    		<option>향</option>
-                    		<option>1</option>
-                    		<option>2</option>
-                    		<option>3</option>
-                    	</select>
+						<p>향↓</p>
+						<% for(int i =0;i<accordList.size();i++){ %>
+						<% Accord accord = accordList.get(i); %>
+							<label><input type="checkbox" name="accord" value="<%=accord.getAccord_id()%>"
+							 <%for(int j =0; j<productAccordList.size();j++){ %>
+							 <%ProductAccord productAccord = productAccordList.get(j); %>
+							 <%if(productAccord.getAccord_id()==accord.getAccord_id() && productAccord.getProduct_id() == product.getProduct_id()){ %>
+							 checked
+							 <%}} %>								
+							> <%=accord.getAccord_name()%></label>
+						<%} %>
                     </div>
                     <div class="form-group">
                     	<select name ="gender_id">
-                    		<option ><%=product.getGender_id() %></option>
-                    		<option value= "1">male</option>
-                    		<option value= "2">female</option>
-                    		<option value= "3">unisex</option>
+                    		<%for(int j =0;j<genderList.size();j++){ %>
+                    		<%Gender gender = genderList.get(j); %>
+                    		<%for(int i =0; i<productGenderList.size();i++){ %>
+                    		<%ProductGender productGender= productGenderList.get(i); %>
+                    		<%if(productGender.getProduct_id() == product.getProduct_id() && productGender.getGender_id() ==gender.getGender_id()){ %>
+                    		<option value="<%=gender.getGender_id()%>"><%=gender.getGender_name() %></option>
+                    		<%}}} %>
+                    		<option value="1">male</option>
+                    		<option value="2">female</option>
+                    		<option value="3">unisex</option>
                     	</select>
                     </div>
                   
@@ -133,21 +186,15 @@
 					<div id="drop" style="border:1px solid black; width:800px; height:300px; padding:3px">
 						여기로 drag & drop
 					<div id="thumbnails">
-	                  <%-- 	<%for(int i=0;i<product.getProductImgs().size();i++){
-	                  		ProductImg productImg= (ProductImg)product.getProductImgs().get(i);%>
-	                  		<div class="thumb">
-		                  	<div class="close" data-idx="<%=i%>">X</div>	
-		                  	<img src="/resources/data/<%=productImg.getImg() %>"  />
-	                  		</div>
-	                  	<%} %> --%>					
 					</div>
+					<input type="hidden" id ="datas" name="datas" value="">
 					</div>
                   </div>
                 </div>
                 <!-- /.card-body -->
 
                 <div class="card-footer">
-                  <button type="button" class="btn btn-info" id="btnSubmit">수정</button>
+                  <button type="button" class="btn btn-info" id="bt_edit">수정</button>
                   <button type="button" class="btn btn-info" id="bt_del">삭제</button>
                   <button type="button" class="btn btn-info" onClick="history.back()">목록</button>
                 </div>
@@ -182,40 +229,36 @@
 <script src="/resources/admin/plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
 
 <script>
-
 $(function () {
   bsCustomFileInput.init();
-  
 });
 </script>
 <script>
-var uploadFiles = []; //전송할 File 객체배열 
+var uploadFiles = [];
+var uploadTopNotes=[];
+var uploadMiddleNotes=[];
+var uploadBaseNotes=[];
+var uploadAccords =[];
 var $drop = $("#drop");
-var cnt =<%=div%>;
+
   $(function () {
     // Summernote
     $('#introduce').summernote()
     $('#detail').summernote()
     
-    $("#bt_update").click(function(){
-    	update();
-    });
-    $("#bt_del").click(function(){
-    	del();
-    });
+    //이미지 미리보기 버튼 이벤트
+  $("input[name='imgFiles']").change(function(){
+    	preview2(this);
+    });  
     
-   <%for(int i=0; i< product.getProductImgs().size();i++){
+    <%for(int i=0; i< product.getProductImgs().size();i++){
     	ProductImg productImg= (ProductImg)product.getProductImgs().get(i);
     %>
     
     onloadPreview('<%=productImg.getImg()%>','<%=i%>');
     <%}%>
-});
-  
- awd
-//온로드 미리보기
-//이미지명 가상폴더에서 가져온 뒤 뿌리고 e.target.result를 file객체로 만들어서 폼데이터 append  
-//이벤트 없이 서버에서 이미지를 가져와서 동적 출력 
+  })
+
 function onloadPreview(img,idx){
 	var xhttp=new XMLHttpRequest();
 	
@@ -243,13 +286,9 @@ function onloadPreview(img,idx){
 	}
 	xhttp.send();
 }
+  
 
-/* function removeImg(obj){
-	//uploadFiles에서 객체삭제 
-	uploadFiles.splice(obj , 1);
-} */
 
-//Drag n' Drop
 $drop.on("dragenter", function(e) { //드래그 요소가 들어왔을떄
 	$(this).addClass('drag-over');
 }).on("dragleave", function(e) { //드래그 요소가 나갔을때
@@ -267,40 +306,65 @@ $drop.on("dragenter", function(e) { //드래그 요소가 들어왔을떄
 		preview(file, size - 1); //미리보기 만들기
 	}
 });
-
-
-//드래그 한 이미지 미리보기 
 function preview(file, idx) {
 	var reader = new FileReader();
 	reader.onload = (function(f, idx) {
 		return function(e) {
 			var div = '<div class="thumb"> \
-			<div class="close" id="close" data-idx="' + idx + '">X</div> \
+			<div class="close" data-idx="' + idx + '">X</div> \
 			<img src="' + e.target.result + '" title="' + escape(f.name) + '"/> \
 			</div>';
 			$("#thumbnails").append(div);
-			console.log(idx);
 		};
 	})(file, idx);
 	reader.readAsDataURL(file);
 }
-
-//수정
-$("#btnSubmit").on("click", function() {
-	var formData = new FormData();
+	
+$("#bt_edit").on("click", function() {
+	var formData = new FormData(); //폼을 대체할 것ㄷ임 
+	
 	$.each(uploadFiles, function(i, file) {
 		if(file.upload != 'disable') //삭제하지 않은 이미지만 업로드 항목으로 추가
 		formData.append('imgFiles', file, file.name);
+		console.log(file);
+		console.log(file.name);
 	});
+	
+	$("input[name='top_note']:checked").each(function(){
+		var top_note = $(this).val();
+		uploadTopNotes.push(top_note);
+	});
+	
+	$("input[name='middle_note']:checked").each(function(){
+		var middle_note = $(this).val();
+		uploadMiddleNotes.push(middle_note);
+	});
+	$("input[name='base_note']:checked").each(function(){
+		var base_note = $(this).val();
+		uploadBaseNotes.push(base_note);
+	});
+	
+	$("input[name='accord']:checked").each(function(){
+		var accord = $(this).val();
+		uploadAccords.push(accord);
+	});
+	
 	
 	formData.append('product_id', $("input[name='product_id']").val());
 	formData.append('product_name', $("input[name='product_name']").val());
 	formData.append('price', 		$("input[name='price']").val());
 	formData.append('brand_id', 	$("select[name='brand_id']").val());
-	formData.append('gender_id', 	$("select[name='gender_id']").val());
-	formData.append('introduction', $("textarea[name='introduction']").val());	
 	
-	$.ajax({
+	formData.append('uploadTopNotes', uploadTopNotes);
+	formData.append('uploadMiddleNotes',uploadMiddleNotes);
+	formData.append('uploadBaseNotes', uploadBaseNotes);
+	formData.append('uploadAccords', uploadAccords);
+	
+	formData.append('gender_id', 	$("select[name='gender_id']").val());
+	formData.append('introduction', $("textarea[name='introduction']").val());
+	
+	
+ 	$.ajax({
 		url: '/admin/product/update',
 		data : formData,
 		type : 'post',
@@ -308,31 +372,32 @@ $("#btnSubmit").on("click", function() {
 		processData: false,
 		success : function(ret) {
 			alert("수정 완료");
-			location.href="/admin/product/detail?product_id="+<%=product.getProduct_id()%>;
+			location.href="/admin/product/detail2?product_id="+$("input[name='product_id']").val();
 		}
-	});
+	}); 
+	
 });
 
-//미리보기 삭제
+$("#bt_del").on("click",function(){
+	del();
+});
+
+
+function del(){
+	if(confirm('삭제하시겠습니까?')){
+		form1.action="/admin/product/delete";
+		form1.method="get";
+		form1.submit();
+	}
+}
+
 $("#thumbnails").on("click", ".close", function(e) {
 	var $target = $(e.target);
 	var idx = $target.attr('data-idx');
 	uploadFiles[idx].upload = 'disable'; //삭제된 항목은 업로드하지 않기 위해 플래그 생성
 	$target.parent().remove(); //프리뷰 삭제
 });
-/* 			 백업 $("#preview").append($("<img src='"+e.target.result+"' width='100px'>")); */
 
-
-//삭제하기
-function del(){
-	if(confirm('삭제하시겠어요?')){
-		$("form[name='form1']").attr({
-			action: "/admin/product/delete",
-			method: "get",
-		});
-		$("form[name='form1']").submit();	
-	}
-}  
 </script>
 
 </body>

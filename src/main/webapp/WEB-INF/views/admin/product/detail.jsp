@@ -7,18 +7,25 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>AdminLTE 3 | Dashboard</title>
-	
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>AdminLTE 3 | Detail</title>
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 	<%@ include file="../../admin_inc/head_link.jsp" %>
 	
-  <!-- CodeMirror -->
-  <link rel="stylesheet" href="/resources/admin/plugins/codemirror/codemirror.css">
-  <link rel="stylesheet" href="/resources/admin/plugins/codemirror/theme/monokai.css">	
-  
-  <!-- summernote -->
-  <link rel="stylesheet" href="/resources/admin/plugins/summernote/summernote-bs4.min.css">
+	<!-- CodeMirror -->
+	<link rel="stylesheet" href="/resources/admin/plugins/codemirror/codemirror.css">
+	<link rel="stylesheet" href="/resources/admin/plugins/codemirror/theme/monokai.css">	
+	
+	<!-- summernote -->
+	<link rel="stylesheet" href="/resources/admin/plugins/summernote/summernote-bs4.min.css">
+	
+<style>
+	.drag-over { background-color: #ff0; }
+	.thumb { width:200px; padding:5px; float:left; }
+	.thumb > img { width:100%; }
+	.thumb > .close { position:absolute; background-color:red; cursor:pointer; }
+</style>
 
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -43,7 +50,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0">Dashboard</h1>
+            <h1 class="m-0"></h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -119,34 +126,28 @@
                     </div>
                   
                   <div class="form-group">
-                  	<textarea id="introduction" name="introduction">
-                  		<%=product.getIntroduction() %>
-              		</textarea>
+                  	<textarea id="introduction" name="introduction"><%=product.getIntroduction() %></textarea>
                	  </div>
                	  
                   <div class="form-group">
-	                  <div id="preview">
-	                  	<%for(int i=0;i<product.getProductImgs().size();i++){
+					<div id="drop" style="border:1px solid black; width:800px; height:300px; padding:3px">
+						여기로 drag & drop
+					<div id="thumbnails">
+	                  <%-- 	<%for(int i=0;i<product.getProductImgs().size();i++){
 	                  		ProductImg productImg= (ProductImg)product.getProductImgs().get(i);%>
-	                  		<div id="<%=i%>" style="width:120px;display:inline-block">
-		                  	<div onClick="delImg(<%=i%>)">X</div>	
-		                  	<img src="/resources/data/<%=productImg.getImg() %>" width="100px" />
+	                  		<div class="thumb">
+		                  	<div class="close" data-idx="<%=i%>">X</div>	
+		                  	<img src="/resources/data/<%=productImg.getImg() %>"  />
 	                  		</div>
-	                  	<%} %>
-	                  </div>
-                  
-                    <div class="input-group">
-                      <div class="custom-file">
-                        <input type="file" class="custom-file-input" multiple name="imgFiles">
-                        <label class="custom-file-label" for="exampleInputFile">Choose file</label>
-                      </div>
-                    </div>
+	                  	<%} %> --%>					
+					</div>
+					</div>
                   </div>
                 </div>
                 <!-- /.card-body -->
 
                 <div class="card-footer">
-                  <button type="button" class="btn btn-info" id="bt_update">수정</button>
+                  <button type="button" class="btn btn-info" id="btnSubmit">수정</button>
                   <button type="button" class="btn btn-info" id="bt_del">삭제</button>
                   <button type="button" class="btn btn-info" onClick="history.back()">목록</button>
                 </div>
@@ -184,100 +185,153 @@
 
 $(function () {
   bsCustomFileInput.init();
+  
 });
 </script>
 <script>
+var uploadFiles = []; //전송할 File 객체배열 
+var $drop = $("#drop");
 var cnt =<%=div%>;
   $(function () {
     // Summernote
     $('#introduce').summernote()
     $('#detail').summernote()
     
-    //이미지 미리보기 버튼 이벤트
-  $("input[name='imgFiles']").change(function(){
-    	preview2(this);
-    });  
-    /*
-    document.querySelector("input[name='imgFiles']").addEventListener("change",function(){
-    	preview(this);
-    }); 
-    */
     $("#bt_update").click(function(){
-    	upate();
+    	update();
     });
     $("#bt_del").click(function(){
     	del();
     });
-  })
-
-function update(){
-	 $("form[name='form1']").attr({
-			action: "/admin/product/update",
-			method: "post",
-			enctype: "multipart/form-data"
-		 });
-		 $("form[name='form1']").submit();
-	  	  
-  }
-	<%-- <div id="<%=i%>" style="width:120px;display:inline-block">	
-  	<div onClick="delImg(<%=i%>)">X</div>	
-  	<img src="/resources/data/<%=productImg.getImg() %>" width="100px" />
-	</div> --%>
-/* 			 백업 $("#preview").append($("<img src='"+e.target.result+"' width='100px'>")); */
+    
+   <%for(int i=0; i< product.getProductImgs().size();i++){
+    	ProductImg productImg= (ProductImg)product.getProductImgs().get(i);
+    %>
+    
+    onloadPreview('<%=productImg.getImg()%>','<%=i%>');
+    <%}%>
+});
   
-//제이쿼리로도 처리해본다
-
-function preview2(obj){
-	  for(var i=0; i<obj.files.length;i++){
-		  var reader = new FileReader();
-		  reader.onload=function(e){
-			  cnt++;
-			  var tag= "<div id='"+cnt+"' style='width:120px;display:inline-block'>";
-			  tag += "<div onClick='delImg("+cnt+")'>X</div>";
-			  tag += "<img src='"+e.target.result+"' width='100px' />";
-			  tag +="</div>";
-			  $("#preview").append($(tag));
-			  console.log(cnt);
-		  }
-		  reader.readAsDataURL(obj.files[i]);
-	  }
-  }
-
-function delImg(n){
-	if(confirm("사진을 삭제하시겠습니까?")){
-	alert("삭제할 부모  div는 "+n);
+//온로드 미리보기
+//이미지명 가상폴더에서 가져온 뒤 뿌리고 e.target.result를 file객체로 만들어서 폼데이터 append  
+//이벤트 없이 서버에서 이미지를 가져와서 동적 출력 
+function onloadPreview(img,idx){
+	var xhttp=new XMLHttpRequest();
 	
-	var div = document.getElementById(n);
-	document.getElementById("preview").removeChild(div);
+	xhttp.open("GET", "/resources/data/"+img, true);
 	
-	document.getElementById("hidden"+n).value="0";	
+	xhttp.responseType="blob";
+	
+	xhttp.onload=function(){
+		var reader = new FileReader();
+		
+		reader.onload=function(e){
+			//불려진 파일 데이터를 이용하여 파일 객체 생성하기 왜??  서버에 전송하기 위해 (formData 추가하려고...)
+			var file = new File([xhttp.response], img);
+			
+			uploadFiles.push(file);  // java list.add();
+			console.log("uploadFiles is "+uploadFiles);
+			
+			
+			console.log("e : ", e);
+			var div="<div class='thumb'><div class='close' data-idx='"+idx+"' \">X</div><img src='"+e.target.result+"' ></div>";
+			$("#thumbnails").append(div);
+			console.log(idx);
+		}
+		reader.readAsDataURL(xhttp.response);
+	}
+	xhttp.send();
+}
+
+/* function removeImg(obj){
+	//uploadFiles에서 객체삭제 
+	uploadFiles.splice(obj , 1);
+} */
+
+//Drag n' Drop
+$drop.on("dragenter", function(e) { //드래그 요소가 들어왔을떄
+	$(this).addClass('drag-over');
+}).on("dragleave", function(e) { //드래그 요소가 나갔을때
+	$(this).removeClass('drag-over');
+}).on("dragover", function(e) {
+	e.stopPropagation();
+	e.preventDefault();
+}).on('drop', function(e) { //드래그한 항목을 떨어뜨렸을때
+	e.preventDefault();
+	$(this).removeClass('drag-over');
+	var files = e.originalEvent.dataTransfer.files; //드래그&드랍 항목
+	for(var i = 0; i < files.length; i++) {
+		var file = files[i];
+		var size = uploadFiles.push(file); //업로드 목록에 추가
+		preview(file, size - 1); //미리보기 만들기
+	}
+});
+
+
+//드래그 한 이미지 미리보기 
+function preview(file, idx) {
+	var reader = new FileReader();
+	reader.onload = (function(f, idx) {
+		return function(e) {
+			var div = '<div class="thumb"> \
+			<div class="close" id="close" data-idx="' + idx + '">X</div> \
+			<img src="' + e.target.result + '" title="' + escape(f.name) + '"/> \
+			</div>';
+			$("#thumbnails").append(div);
+			console.log(idx);
+		};
+	})(file, idx);
+	reader.readAsDataURL(file);
+}
+
+//수정
+$("#btnSubmit").on("click", function() {
+	var formData = new FormData();
+	$.each(uploadFiles, function(i, file) {
+		if(file.upload != 'disable') //삭제하지 않은 이미지만 업로드 항목으로 추가
+		formData.append('imgFiles', file, file.name);
+	});
+	
+	formData.append('product_id', 	$("input[name='product_id']").val());
+	formData.append('product_name', $("input[name='product_name']").val());
+	formData.append('price', 		$("input[name='price']").val());
+	formData.append('brand_id', 	$("select[name='brand_id']").val());
+	formData.append('gender_id', 	$("select[name='gender_id']").val());
+	formData.append('introduction', $("textarea[name='introduction']").val());	
+	
+	$.ajax({
+		url: '/admin/product/update',
+		data : formData,
+		type : 'post',
+		contentType : false,
+		processData: false,
+		success : function(result,status,xhr) {
+			alert("수정 완료");
+			location.href="/admin/product/detail?product_id="+<%=product.getProduct_id()%>;
+		}
+	});
+});
+
+//미리보기 삭제
+$("#thumbnails").on("click", ".close", function(e) {
+	var $target = $(e.target);
+	var idx = $target.attr('data-idx');
+	uploadFiles[idx].upload = 'disable'; //삭제된 항목은 업로드하지 않기 위해 플래그 생성
+	$target.parent().remove(); //프리뷰 삭제
+});
+/* 			 백업 $("#preview").append($("<img src='"+e.target.result+"' width='100px'>")); */
+
+
+//삭제하기
+function del(){
+	if(confirm('삭제하시겠어요?')){
+		$("form[name='form1']").attr({
+			action: "/admin/product/delete",
+			method: "get",
+		});
+		$("form[name='form1']").submit();	
 	}
 }  
-
-//자바스크립트도 stream이 지원된다..
-function preview(obj){
-	console.log("이벤트를 발생시킨 컴포넌트는,",obj);
-	console.log("obj.files는", obj.files);
-	
-	for(var i=0;i<obj.files.length;i++){
-		//파일에 대한 접근 방법을 알았으니, 지금부터는 실제 파일을 읽어와보자!! 그러기 위해서는 스트림이 필요하다
-		var reader = new FileReader();
-		reader.onload=function(e){
-		 console.log("읽어들인 정보는: ",e);
-		 
-		 //div에 동적으로 img 돔을 생성하여 그 돔의 src속성에 e.target.result
-		 var img = document.createElement("img");
-		 img.src=e.target.result;
-		 img.style.width=100+"px";
-		 document.getElementById("preview").appendChild(img);//동적으로 이미지 돔을 div에 넣기!!
-		 
-		};//파일을 다 읽어들이면, 익명함수 호출...
-		
-		reader.readAsDataURL(obj.files[i]); //파일 읽어들이기...
-	}
-  }
-
-
 </script>
 
 </body>

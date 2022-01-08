@@ -40,7 +40,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0">제품 목록</h1>
+            <h1 class="m-0"></h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -61,6 +61,7 @@
           <div class="col-12">
             <div class="card card-info">
               <div class="card-header" >
+              제품 목록
                 <div class="card-tools">
                   <div class="input-group input-group-sm" style="width: 150px;">
                     <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
@@ -91,7 +92,7 @@
                     <%Product product = productList.get(curPos++); %>
                     <tr>
                       <td><%=num--%></td>
-                      <td><a href="/admin/product/detail?product_id=<%=product.getProduct_id()%>"><%=product.getProduct_name() %></a></td>
+                      <td><a href="/admin/product/detail2?product_id=<%=product.getProduct_id()%>"><%=product.getProduct_name() %></a></td>
                       <td><%=product.getPrice() %></td>
                     </tr>
                     <%} %>

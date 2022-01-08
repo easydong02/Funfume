@@ -1,4 +1,4 @@
-<%@ page contentType="text/html; charset=UTF-8"%>
+<%@ page contentType="text/html;charset=UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -137,6 +137,9 @@ function regist(){
 		 },
 		 success:function(result,status,xhr){
 			 alert(result);
+			 if(result.code==1){
+				 location.href="/admin/notice/list";
+			 }
 		 }
 		 
 	 });
