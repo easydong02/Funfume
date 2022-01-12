@@ -18,7 +18,7 @@
           <img src="/resources/admin/dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <a href="#" class="d-block"><%-- <%=admin.getName()%> --%>님 접속 중</a>
+          <a href="#" class="d-block"><%=admin.getName()%>님 접속 중</a>
         </div>
       </div>
 

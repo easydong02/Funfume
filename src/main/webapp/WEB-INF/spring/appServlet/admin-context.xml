@@ -39,14 +39,14 @@
 	<beans:bean class="com.koreait.funfume.aop.AdminSessionCheckAspect" id ="adminSessionCheckAspect"/>
 	
 
-	<!-- <aop:config>
+	<aop:config>
 		<aop:aspect ref="adminSessionCheckAspect">
-			모든 관리자로 들어오는 요청을 처리하는 메서드가 aop의 대상이 된다
+			<!-- 모든 관리자로 들어오는 요청을 처리하는 메서드가 aop의 대상이 된다 -->
 			<aop:pointcut expression="execution(public * com.koreait.funfume.controller.admin..*(..))" id="loginPorincut"/>
 			
-			aop로 작동될 로직이 관여할 시점은 원래의 타겟이 되었던 메서드의 전,후이다
+			<!-- aop로 작동될 로직이 관여할 시점은 원래의 타겟이 되었던 메서드의 전,후이다 -->
 			<aop:around method="sessionCheck" pointcut-ref="loginPorincut"/>
 		</aop:aspect>
-	</aop:config> -->
+	</aop:config> 
 	
 </beans:beans>
