@@ -133,9 +133,16 @@ List<ProductGender> productGenderList = (List)request.getAttribute("productGende
 											<i class="fs-16 zmdi zmdi-plus"></i>
 										</div>
 									</div>
+									<%if(member !=null){ %>
 									<button type ="button" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04" id="bt_purchase">
 										Purchase
 									</button>
+									<%}else{ %>
+									<button type ="button" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04">
+										로그인해주세요
+									</button>
+									
+									<%} %>
 								</div>
 							</div>	
 						</div>
@@ -384,7 +391,7 @@ List<ProductGender> productGenderList = (List)request.getAttribute("productGende
 						<div class="block2">
 							<div class="block2-pic hov-img0">
 								<%ProductImg productsImg= (ProductImg)products.getProductImgs().get(0); %>
-								<img src="/resources/data/<%=productsImg.getImg() %>" alt="IMG-PRODUCT">
+								<img src="/resources/data/<%=productsImg.getImg() %>" width='300' height='340'>
 
 							<!-- 	<a href="#" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
 									Quick View
