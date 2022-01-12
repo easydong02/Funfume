@@ -6,6 +6,7 @@ import com.koreait.funfume.domain.Accord;
 import com.koreait.funfume.domain.Member;
 
 public interface MemberDAO {
+	
 	public List selectAll(); //모든회원목록
 	public Member signIn(Member member); 
 	public Member select(int member_id);

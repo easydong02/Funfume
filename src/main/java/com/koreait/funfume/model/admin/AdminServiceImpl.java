@@ -12,6 +12,7 @@ import com.koreait.funfume.exception.AdminException;
 
 @Service
 public class AdminServiceImpl implements AdminService{
+	
 	@Autowired
 	private AdminDAO adminDAO;
 

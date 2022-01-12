@@ -133,9 +133,9 @@
             <!-- 자식메뉴 begin -->
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="/resources/admin/pages/layout/top-nav.html" class="nav-link">
+                <a href="/admin/order/list" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>임시</p>
+                  <p>주문내역</p>
                 </a>
               </li>
             </ul>

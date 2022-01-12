@@ -17,6 +17,7 @@ import com.koreait.funfume.domain.ProductGender;
 @Service
 public class ProductGenderServiceImpl implements ProductGenderService{
 	
+	
 	@Autowired
 	ProductGenderDAO productGenderDAO;
 

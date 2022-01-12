@@ -15,6 +15,7 @@ import com.koreait.funfume.domain.ProductNote;
  */
 
 public interface ProductGenderDAO {
+	
 	public List selectAll();
 	public ProductGender select(int product_gender_id);
 	public void insert(ProductGender productGender);

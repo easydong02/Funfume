@@ -208,6 +208,26 @@ function del(n){
                     	</td>
                     </tr>
                   </tbody>
+                  <tfoot>
+                   		<td colspan="8" align="center">
+						<%-- <% if(pager.getCurrentPage()-1>0){ %>
+								<a href="/admin/note/list.jsp?currentPage=<%=pager.getFirstPage()-1%>">이전페이지</a>
+							<%}else{ %>
+								<a href="javascript:alert('첫페이지입니다')"> 이전페이지</a>
+							<% } %> --%>
+							<%for(int i=pager.getFirstPage();i<=pager.getLastPage();i++){ %>
+								<%if(i>=pager.getTotalPage()+1)break;%>
+								<a href="/admin/accord/list?currentPage=<%=i%>" <%if(i==pager.getCurrentPage()){ %> class="pageNum" <%}%>>
+									[<%=i%>]
+								</a>
+							<%}%>
+					     			<%-- <%if(pager.getLastPage()+1 > pager.getTotalPage()){ %>
+					             				<a href="javascript:alert('다음페이지가 없습니다')"></a>
+					             			<%} else{ %>
+								<a href="/admin/note/list.jsp?currentPage=<%=pager.getLastPage()+1%>">다음페이지</a>
+					             			<%} %> --%>
+             			</td>
+					</tfoot>
                 </table>
               </div>
               <!-- /.card-body -->

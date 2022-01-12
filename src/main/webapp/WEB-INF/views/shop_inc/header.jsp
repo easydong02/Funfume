@@ -29,7 +29,7 @@
 					</a>
 				<%} %>
 				<%if(member!=null) {%>
-					<a href="/mypage" class="flex-c-m trans-04 p-lr-25">
+					<a href="/myaccount" class="flex-c-m trans-04 p-lr-25">
 						MY PAGE
 					</a>
 				<%} %>
@@ -55,15 +55,9 @@
                <ul class="main-menu">
                   <li class="active-menu">
                      <a href="/">Home</a>
-
                   </li>
-
                   <li>
                      <a href="/shop">Shop</a>
-                  </li>
-
-                  <li>
-                     <a href="/cart">Cart</a>
                   </li>
                   <li>
                      <a href="/notice">Notice</a>
@@ -153,7 +147,7 @@
 					</a>
 				<%} %>
 				<%if(member!=null) {%>
-					<a href="/mypage" class="flex-c-m trans-04 p-lr-25">
+					<a href="/myaccount" class="flex-c-m trans-04 p-lr-25">
 						MY PAGE
 					</a>
 				<%} %>

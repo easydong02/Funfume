@@ -14,6 +14,7 @@ import lombok.Setter;
 @Setter
 @Getter
 public class Pager {
+	
 	int totalRecord;
 	int pageSize=10;
 	int totalPage;

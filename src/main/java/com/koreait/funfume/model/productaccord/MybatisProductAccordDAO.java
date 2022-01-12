@@ -23,6 +23,7 @@ import com.koreait.funfume.exception.UploadException;
 @Repository
 public class MybatisProductAccordDAO implements ProductAccordDAO{
 	
+	
 	@Autowired
 	private SqlSessionTemplate sessionTemplate;
 

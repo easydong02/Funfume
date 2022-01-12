@@ -17,6 +17,7 @@ import com.koreait.funfume.domain.ProductAccord;
 @Service
 public class ProductAccordServiceImpl implements ProductAccordService {
 	
+	
 	@Autowired
 	private ProductAccordDAO productAccordDAO;
 	

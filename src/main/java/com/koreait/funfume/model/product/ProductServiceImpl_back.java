@@ -21,6 +21,7 @@ import com.koreait.funfume.domain.ProductNote;
 
 public class ProductServiceImpl_back implements ProductService {
 	
+	
 	@Autowired
 	private ProductDAO productDAO;
 	@Autowired
@@ -121,6 +122,11 @@ public class ProductServiceImpl_back implements ProductService {
 	public void delete(int product_id) throws ProductException, ProductImgException{
 		productImgDAO.delete(product_id);
 		productDAO.delete(product_id);
+	}
+
+	@Override
+	public List selectGender(int gender_id) {
+		return null;
 	}
 
 }

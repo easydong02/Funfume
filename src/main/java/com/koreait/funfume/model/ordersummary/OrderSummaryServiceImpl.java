@@ -36,4 +36,9 @@ public class OrderSummaryServiceImpl implements OrderSummaryService {
 		orderDetailDAO.insert(orderDetail);
 		
 	}
+
+	@Override
+	public List adminSelectAll() {
+		return orderSummaryDAO.adminSelectAll();
+	}
 }

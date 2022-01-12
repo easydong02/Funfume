@@ -19,6 +19,7 @@ import com.koreait.funfume.exception.AdminException;
 @Repository
 public class MybatisAdminDAO implements AdminDAO{
 	
+	
 	@Autowired
 	private SqlSessionTemplate sessionTemplate;
 	

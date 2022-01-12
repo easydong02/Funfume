@@ -19,6 +19,7 @@ import com.koreait.funfume.domain.ProductGender;
 @Repository
 public class MybatisProductGenderDAO implements ProductGenderDAO{
 	
+	
 	@Autowired
 	SqlSessionTemplate sessionTemplate;
 

@@ -12,8 +12,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>FUNFUME | admin</title>
-	
 <%@ include file="../../admin_inc/head_link.jsp" %>
+	
 	
 <script type="text/javascript">
 $(function(){

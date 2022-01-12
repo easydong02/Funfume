@@ -301,6 +301,7 @@ $("#bt_regist").on("click", function() {
 		type : 'post',
 		contentType : false,
 		processData: false,
+		error: function(error){ console.log(JSON.stringify(error));},
 		success : function(ret) {
 			alert("완료");
 			location.href="/admin/product/list";

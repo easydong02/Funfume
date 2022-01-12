@@ -13,6 +13,7 @@ import com.koreait.funfume.domain.ProductAccord;
  *
  */
 public interface ProductAccordDAO {
+	
 	public List selectAll();
 	public ProductAccord select(int product_accord_id);
 	public void insert(ProductAccord productAccord);

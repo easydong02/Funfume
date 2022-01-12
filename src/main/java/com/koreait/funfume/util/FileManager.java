@@ -24,6 +24,7 @@ public class FileManager {
 	//다중 파일 업로드 처리
 	public static String[] saveMultiFile(HttpServletRequest request,Product product) throws UploadException{
 		
+		
 		String saveDir= request.getServletContext().getRealPath("/resources/data"); //파일 저장 경로
 		System.out.println(saveDir);
 		

@@ -27,4 +27,9 @@ public class MybatisOrderSummaryDAO implements OrderSummaryDAO{
 			throw new OrderException("주문등록실패");
 		}
 	}
+
+	@Override
+	public List adminSelectAll() {
+		return sessionTemplate.selectList("OrderSummary.adminSelectAll");
+	}
 }

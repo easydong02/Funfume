@@ -6,7 +6,6 @@ import java.security.NoSuchAlgorithmException;
 
 public class HashBuilder {
 	
-	
 	public String convertStringToHash(String pass) {// banana
 		//알고리즘 선택!!Sha-256 :64자길이를 갖음
 		StringBuffer sb = new StringBuffer(); //하나의 문자열 객체로 수정하기 위해서

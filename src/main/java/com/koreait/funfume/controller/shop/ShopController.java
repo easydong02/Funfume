@@ -6,6 +6,7 @@ package com.koreait.funfume.controller.shop;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,6 +24,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.koreait.funfume.domain.Accord;
 import com.koreait.funfume.domain.Brand;
 import com.koreait.funfume.domain.Gender;
+import com.koreait.funfume.domain.Member;
 import com.koreait.funfume.domain.Note;
 import com.koreait.funfume.domain.Product;
 import com.koreait.funfume.domain.ProductAccord;
@@ -31,6 +34,7 @@ import com.koreait.funfume.domain.Review;
 import com.koreait.funfume.model.accord.AccordService;
 import com.koreait.funfume.model.brand.BrandService;
 import com.koreait.funfume.model.gender.GenderService;
+import com.koreait.funfume.model.member.MemberService;
 import com.koreait.funfume.model.note.NoteService;
 import com.koreait.funfume.model.product.ProductService;
 import com.koreait.funfume.model.productaccord.ProductAccordService;
@@ -60,20 +64,14 @@ public class ShopController {
 	private ProductGenderService productGenderService;
 	@Autowired
 	private ReviewService reviewService;
+	@Autowired
+	private MemberService memberService;
 	
 	@GetMapping("/")
 	public String getMain(HttpServletRequest request, Model model) {
 		List<Product> productList = productService.selectAll();
 		model.addAttribute("productList",productList);
 		return "shop/index";
-	}
-	
-	//상품페이지 요청
-	@GetMapping("/shop")
-	public String getProduct(HttpServletRequest request, Model model) {
-		List<Product> productList = productService.selectAll();
-		model.addAttribute("productList",productList);
-		return "shop/product";
 	}
 	
 	//상품 한건 요청
@@ -100,8 +98,40 @@ public class ShopController {
 		mav.addObject("productAccordList",productAccordList);
 		mav.addObject("productGenderList",productGenderList);
 		return mav;
-		
 	}
+	
+	//상품페이지 요청
+	@GetMapping("/shop")
+	public String getProduct(HttpServletRequest request, Model model) {
+		List<Product> productList = productService.selectAll();
+		model.addAttribute("productList", productList);
+		return "shop/product";
+	}
+	
+	//index에서 gender 요청
+	@GetMapping("/product-gender")
+	public String getProductGender(HttpServletRequest request,Model model, int gender_id) {
+		//값넘기기위함
+		List<Product> productList=productService.selectGender(gender_id);
+		model.addAttribute("productList", productList);
+		return "shop/product-gender";
+	}
+	
+	//전체 카테고리 상품목록 요청
+	@RequestMapping(value="/productList", method=RequestMethod.GET)
+	@ResponseBody
+	public List productList(HttpServletRequest request) {
+		List<Product> productList=productService.selectAll();
+		return productList;
+	}
+	//성별 카테고리 상품목록 요청
+	@RequestMapping(value="/genderList", method=RequestMethod.GET)
+	@ResponseBody
+	public List genderList(HttpServletRequest request, @RequestParam(name="gender_id" , defaultValue="0") int gender_id) {
+		List<Product> genderList=productService.selectGender(gender_id);
+		return genderList;
+	}
+	
 	
 	//주문페이지 요청
 	@GetMapping("/features")
@@ -139,7 +169,7 @@ public class ShopController {
 	
 	//내 주문 리스트 요청
 	@GetMapping("/myaccount")
-	public ModelAndView getMyAccount() {
+	public ModelAndView getMyAccount(HttpServletRequest request) {
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("shop/myaccount");
 		return mav;

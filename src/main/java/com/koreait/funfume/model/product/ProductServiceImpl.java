@@ -111,4 +111,9 @@ public class ProductServiceImpl implements ProductService {
 		productDAO.delete(product_id);
 	}
 
+	
+	@Override
+	public List selectGender(int gender_id) {
+		return productDAO.selectGender(gender_id);
+	}
 }

@@ -3,7 +3,7 @@
 <%@page import="java.util.List"%>
 <%@ page contentType="text/html;charset=UTF-8"%>
 <%
-List<OrderSummary> orderSummaryList = (List)request.getAttribute("orderSummaryList");
+	List<OrderSummary> orderSummaryList = (List)request.getAttribute("orderSummaryList");
 %>
 
 <!DOCTYPE html>

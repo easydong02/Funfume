@@ -6,6 +6,7 @@ import com.koreait.funfume.domain.Admin;
 
 public interface AdminService {
 	
+	
 	public List selectAll();//관리자 모든 목록
 	public Admin select(Admin admin);//
 	public void insert(Admin admin);

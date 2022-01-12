@@ -152,7 +152,7 @@
 							<% } %> --%>
 							<%for(int i=pager.getFirstPage();i<=pager.getLastPage();i++){ %>
 								<%if(i>=pager.getTotalPage()+1)break;%>
-								<a href="/admin/note/list.jsp?currentPage=<%=i%>" <%if(i==pager.getCurrentPage()){ %> class="pageNum" <%}%>>
+								<a href="/admin/note/list?currentPage=<%=i%>" <%if(i==pager.getCurrentPage()){ %> class="pageNum" <%}%>>
 									[<%=i%>]
 								</a>
 							<%}%>
