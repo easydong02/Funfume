@@ -1,3 +1,4 @@
+<%@page import="com.koreait.funfume.domain.Brand"%>
 <%@page import="com.koreait.funfume.domain.Accord"%>
 <%@page import="com.koreait.funfume.domain.Note"%>
 <%@page import="java.util.List"%>
@@ -5,6 +6,7 @@
 <%
 List<Note> noteList = (List)request.getAttribute("noteList");
 List<Accord> accordList = (List)request.getAttribute("accordList");
+List<Brand> brandList = (List)request.getAttribute("brandList");
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -55,7 +57,7 @@ List<Accord> accordList = (List)request.getAttribute("accordList");
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0">Dashboard</h1>
+            <h1 class="m-0"></h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -76,7 +78,7 @@ List<Accord> accordList = (List)request.getAttribute("accordList");
           <div class="col-12">
             <div class="card card-info">
               <div class="card-header">
-                <h3 class="card-title">Quick Example</h3>
+                <h3 class="card-title">제품 등록</h3>
               </div>
               <!-- /.card-header -->
               <!-- form start -->
@@ -94,9 +96,10 @@ List<Accord> accordList = (List)request.getAttribute("accordList");
                   <div class="form-group">
 	                    	<select name ="brand_id">
 	                    		<option >브랜드</option>
-	                    		<option value= "1">1</option>
-	                    		<option value= "2">2</option>
-	                    		<option value= "3">3</option>
+	                    		<%for(int i =0; i<brandList.size();i++){ %>
+	                    		<%Brand brand = brandList.get(i); %>	                    		
+	                    		<option value= "<%=brand.getBrand_id()%>"><%=brand.getBrand_name() %></option>
+	                    		<%} %>
 	                    	</select>
                     </div>
                     <div class="form-group">

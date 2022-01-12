@@ -28,7 +28,6 @@ public class RestNoticeController {
 	@Autowired
 	private NoticeService noticeService;
 	
-	//리스트
 	@GetMapping("/rest/notice")
 	public List getList(HttpServletRequest request) {
 		
@@ -46,20 +45,21 @@ public class RestNoticeController {
 		return notice;
 	}
 	
-	//등록 요청처리 ReST
-	@RequestMapping(value="/rest/notice", method = RequestMethod.POST)
+	//등록요청처리 ReST 표현적 상태 전송
+	@RequestMapping(value="/rest/notice", method=RequestMethod.POST)
+	@ResponseBody
 	public ResponseEntity<Message> insert(Notice notice) {
-		System.out.println(notice.getTitle());
-		System.out.println(notice.getWriter());
-		System.out.println(notice.getContent());
-		
 		noticeService.insert(notice);
 		
-		Message message = new Message();
+		Message message=new Message();
 		message.setMsg("등록성공");
-		message.setCode(1);		
+		message.setCode(1);
 		
-		ResponseEntity<Message> entity = new ResponseEntity<Message>(message,HttpStatus.OK); //200	
+		ResponseEntity<Message> entity=new ResponseEntity<Message>(message, HttpStatus.OK); //200
+		
+//		System.out.println(notice.getTitle());
+//		System.out.println(notice.getWriter());
+//		System.out.println(notice.getContent());
 		return entity;
 	}
 	
@@ -68,37 +68,33 @@ public class RestNoticeController {
 	public ResponseEntity<Message> update(Notice notice){
 		noticeService.update(notice);
 		
-		Message message = new Message();
-		message.setMsg("수정 성공");
+		Message message=new Message();
+		message.setMsg("수정성공");
 		message.setCode(1);
 		
-		ResponseEntity<Message> entity = new ResponseEntity<Message>(message,HttpStatus.OK); //200	
+		ResponseEntity<Message> entity=new ResponseEntity<Message>(message, HttpStatus.OK); //200
 		return entity;
 	}
 	
-	//한건 삭제 요청처리
-	@RequestMapping(value="/rest/notice/{notice_id}", method= RequestMethod.DELETE)
-	public ResponseEntity<Message> delete(@PathVariable(name = "notice_id") int notice_id){
-		
-		noticeService.delete(notice_id);
-		
-		Message message = new Message();
-		message.setMsg("삭제 성공");
-		message.setCode(1);
-		
-		ResponseEntity<Message> entity = new ResponseEntity<Message>(message,HttpStatus.OK); //200			
-		
-		return entity;
-	}
+	//한건 삭제 요청 
+		@RequestMapping(value="/rest/notice/{notice_id}", method=RequestMethod.DELETE)
+		public ResponseEntity<Message> delete(@PathVariable(name = "notice_id") int notice_id){
+			noticeService.delete(notice_id);
+			Message message=new Message();
+			message.setMsg("삭제성공");
+			message.setCode(1);
+			ResponseEntity<Message> entity=new ResponseEntity<Message>(message , HttpStatus.OK); //200
+			return entity;
+		}
 	
 	@ExceptionHandler(NoticeException.class)
-	public Message handle(NoticeException e) {
-		Message message = new Message();
+	public ResponseEntity<Message> handle(NoticeException e) {
+		Message message=new Message();
 		message.setMsg(e.getMessage());
 		message.setCode(0);
-		ResponseEntity<Message> entity = new ResponseEntity<Message>(message,HttpStatus.OK); //200	
 		
-		return message;
+		ResponseEntity<Message> entity=new ResponseEntity<Message>(message, HttpStatus.OK); //200
+		
+		return entity;
 	}
-	
 }

@@ -8,7 +8,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>AdminLTE 3 | Dashboard</title>
+  <title>AdminLTE 3 | Noticeboard</title>
 	
 	<%@ include file="../../admin_inc/head_link.jsp" %>
   <!-- summernote -->
@@ -43,7 +43,7 @@
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">Dashboard v1</li>
+              <li class="breadcrumb-item active">Noticeboard </li>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
@@ -59,16 +59,15 @@
           <div class="col-12">
             <div class="card card-info">
               <div class="card-header">
-                <h3 class="card-title">Quick Example</h3>
+                <h3 class="card-title">공지를 등록하세요</h3>
               </div>
               <!-- /.card-header -->
               <!-- form start -->
+              <form name="form1">
+              	<input type="hidden" name="_method" value="PUT">
+              	<input type="hidden" name="notice_id" value="<%=notice.getNotice_id()%>">
                 <div class="card-body">
-	              <form name="form1">
                 
-                    <input type="hidden" name="_method" value="PUT" >
-                    <input type="hidden" class="form-control" value="<%=notice.getNotice_id() %>" name="notice_id">
-                    
                   <div class="form-group">
                     <input type="text" class="form-control" value="<%=notice.getTitle() %>" name="title">
                   </div>
@@ -76,16 +75,17 @@
                     <input type="text" class="form-control" value="<%=notice.getWriter() %>" name="writer">
                   </div>
                   <div class="form-group">
-                    <textarea class="form-control" name="content"><%=notice.getContent() %></textarea>
+                    <textarea class="form-control" name="content" ><%=notice.getContent() %></textarea>
                   </div>
+     
                 <!-- /.card-body -->
+
                 <div class="card-footer">
                   <button type="button" class="btn btn-info" id="bt_edit">글 수정</button>
                   <button type="button" class="btn btn-info" id="bt_del">글 삭제</button>
                   <button type="button" class="btn btn-info" onClick="location.href='/admin/notice/list';">목록</button>
                 </div>
-     			</form>
-              
+              </form>
             </div>
             
             <!-- /.card -->
@@ -127,19 +127,18 @@ $(function () {
  $(function () {
 	
 	$("#bt_edit").click(function(){
-		if(confirm('수정하시겠습니까?')){
+		if(confirm("수정하시겠습니까?")) {
 			edit();
 		}
 	});
+	
 	$("#bt_del").click(function(){
-		if(confirm('삭제하시겠습니까?')){
+		if(confirm("삭제하시겠습니까?")) {
 			del();
 		}
 	});
 	
-});
-
-
+})
 
 function edit(){
 	 //비동기방식으로 글수정 요청을 시도하자!!
@@ -147,8 +146,8 @@ function edit(){
 		 url:"/admin/rest/notice",
 		 type:"post",
 		 data:{
-			 _method : $("input[name='_method']").val(),  //post로 적고 put으로 받는 방법
-			 notice_id:$("input[name='notice_id']").val(),
+			 _method:$("input[name='_method']").val() ,  //post지만 put으로 가는 꼼수...
+			 notice_id:$("input[name='notice_id']").val() ,
 			 title:$("input[name='title']").val(),
 			 writer:$("input[name='writer']").val(),
 			 content:$("textarea[name='content']").val()
@@ -156,30 +155,27 @@ function edit(){
 		 success:function(result,status,xhr){
 			 alert(result.msg);
 			 if(result.code==1){
-				 location.href="/admin/notice/list";
+			 location.href="/admin/notice/list";
 			 }
-		 }
-		 
-	 });
+		}
+ 	});
 }
 
-function del(){
-	$.ajax({
-		
-		url:"/admin/rest/notice/"+$("input[name='notice_id']").val(),
-		type: "post",
-		data:{
-			_method : $("input[name='_method']").val()  //post로 적고 delete으로 받는 방법					
-		},
-		success:function(result,status,xhr){
+ function del(){
+	 $.ajax({
+		 url:"/admin/rest/notice/"+$("input[name='notice_id']").val(),
+		 type:"POST",
+		 data:{
+			 _method:"DELETE"
+		 },
+		 success:function(result, status, xhr){
 			alert(result.msg);
-			if(result==1){
+			if(result.code==1){
 				location.href="/admin/notice/list";
 			}
-		}
-	})
-}
-
+		 }		 
+	 });	 
+ }
 </script>
 </body>
 </html>

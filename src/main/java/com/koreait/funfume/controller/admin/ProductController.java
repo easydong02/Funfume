@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.koreait.funfume.domain.Accord;
+import com.koreait.funfume.domain.Brand;
 import com.koreait.funfume.domain.Gender;
 import com.koreait.funfume.domain.Note;
 import com.koreait.funfume.domain.Product;
@@ -32,6 +33,7 @@ import com.koreait.funfume.exception.ProductException;
 import com.koreait.funfume.exception.ProductImgException;
 import com.koreait.funfume.exception.UploadException;
 import com.koreait.funfume.model.accord.AccordService;
+import com.koreait.funfume.model.brand.BrandService;
 import com.koreait.funfume.model.gender.GenderService;
 import com.koreait.funfume.model.note.NoteService;
 import com.koreait.funfume.model.product.ProductService;
@@ -47,25 +49,20 @@ public class ProductController {
 	
 	@Autowired
 	private FileManager fileManager;
-	
 	@Autowired
 	private ProductService productService;
-	
 	@Autowired
 	private NoteService noteService;
-	
 	@Autowired
 	private AccordService accordService;
-	
 	@Autowired
 	private GenderService genderService;
-	
+	@Autowired
+	private BrandService brandService;
 	@Autowired
 	private ProductNoteService productNoteService;
-	
 	@Autowired
 	private ProductAccordService productAccordService;
-	
 	@Autowired
 	private ProductGenderService productGenderService;
 	
@@ -92,6 +89,7 @@ public class ProductController {
 		List<Note> noteList =noteService.selectAll();
 		List<Accord> accordList =accordService.selectAll();		
 		List<Gender> genderList = genderService.selectAll();
+		List<Brand> brandList = brandService.selectAll();
 		
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("product",product);
@@ -101,6 +99,7 @@ public class ProductController {
 		mav.addObject("noteList", noteList);
 		mav.addObject("accordList", accordList);		
 		mav.addObject("genderList", genderList);		
+		mav.addObject("brandList", brandList);		
 		mav.setViewName("admin/product/detail2");
 		
 		return mav;
@@ -123,10 +122,12 @@ public class ProductController {
 	public ModelAndView registForm(HttpServletRequest request) {
 		List<Note> noteList =noteService.selectAll();
 		List<Accord> accordList =accordService.selectAll();
+		List<Brand> brandList = brandService.selectAll();
 		
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("noteList", noteList);
 		mav.addObject("accordList", accordList);
+		mav.addObject("brandList", brandList);
 		mav.setViewName("admin/product/regist2");
 		
 		return mav;

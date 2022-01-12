@@ -1,3 +1,4 @@
+<%@page import="com.koreait.funfume.domain.Brand"%>
 <%@page import="com.koreait.funfume.domain.Gender"%>
 <%@page import="com.koreait.funfume.domain.ProductGender"%>
 <%@page import="com.koreait.funfume.domain.ProductImg"%>
@@ -13,6 +14,7 @@ Product product= (Product)request.getAttribute("product");
 List<Note> noteList = (List)request.getAttribute("noteList");
 List<Accord> accordList = (List)request.getAttribute("accordList");
 List<Gender> genderList = (List)request.getAttribute("genderList");
+List<Brand> brandList = (List)request.getAttribute("brandList");
 
 List<ProductNote> productNoteList = (List)request.getAttribute("productNoteList");
 List<ProductAccord> productAccordList = (List)request.getAttribute("productAccordList");
@@ -108,10 +110,16 @@ List<ProductGender> productGenderList = (List)request.getAttribute("productGende
                   </div>
                   <div class="form-group">
 	                    	<select name ="brand_id">
-	                    		<option >브랜드</option>
-	                    		<option value= "1">1</option>
-	                    		<option value= "2">2</option>
-	                    		<option value= "3">3</option>
+	                    		<%for(int i =0; i<brandList.size();i++){ %>
+	                    		<%Brand brand = brandList.get(i); %>
+	                    		<%if(brand.getBrand_id() == product.getBrand_id()){ %>
+	                    		<option value="<%=brand.getBrand_id()%>"><%=brand.getBrand_name() %></option>
+	                    		<%}} %>
+	                    		
+	                    		<%for(int i =0; i<brandList.size();i++){ %>
+	                    		<%Brand brand = brandList.get(i); %>	                    		
+	                    		<option value= "<%=brand.getBrand_id()%>"><%=brand.getBrand_name() %></option>
+	                    		<%} %>
 	                    	</select>
                     </div>
                     <div class="form-group">

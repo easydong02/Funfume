@@ -57,7 +57,7 @@
             <!-- 자식메뉴 begin -->
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="/admin/category/list" class="nav-link">
+                <a href="/admin/brand/list" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>브랜드</p>
                 </a>
@@ -109,7 +109,7 @@
             <!-- 자식메뉴 begin -->
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="/resources/admin/pages/layout/top-nav.html" class="nav-link">
+                <a href="/admin/member/list" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>회원관리</p>
                 </a>
